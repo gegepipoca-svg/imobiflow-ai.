@@ -1,0 +1,40 @@
+
+import React, { useState } from 'react';
+
+const StrategyGuide: React.FC = () => {
+  const [activeStep, setActiveStep] = useState(1);
+  const steps = [
+    { id: 1, title: "Subir Código", desc: "No GitHub, arraste todos esses arquivos para o repositório.", icon: "📂" },
+    { id: 2, title: "Conectar Vercel", desc: "No site vercel.com, importe seu repositório 'imobiflow-ai'.", icon: "☁️" },
+    { id: 3, title: "Configurar API", desc: "Adicione a variável 'API_KEY' com sua chave do Google na Vercel.", icon: "🔐" },
+    { id: 4, title: "Decolagem", desc: "Clique em Deploy e pronto! Seu link profissional estará no ar.", icon: "🚀" }
+  ];
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-12">
+      <div className="text-center">
+        <h2 className="text-4xl font-black italic tracking-tighter uppercase text-slate-900">Manual de Implantação 🚀</h2>
+        <p className="text-slate-500 mt-2 font-medium">Transformando código em ferramenta de vendas.</p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {steps.map(s => (
+          <button key={s.id} onClick={() => setActiveStep(s.id)} className={`p-8 rounded-[2rem] border-2 transition-all text-left ${activeStep === s.id ? 'bg-indigo-600 border-indigo-600 text-white shadow-xl scale-105' : 'bg-white border-slate-100 text-slate-400'}`}>
+            <span className="text-2xl block mb-4">{s.icon}</span>
+            <h4 className="font-black uppercase text-[10px] tracking-widest">{s.title}</h4>
+          </button>
+        ))}
+      </div>
+      <div className="bg-white p-12 rounded-[3rem] shadow-2xl border border-slate-50">
+        <h3 className="text-2xl font-black uppercase italic text-slate-900 mb-4">{steps[activeStep-1].title}</h3>
+        <p className="text-slate-600 font-medium leading-relaxed">{steps[activeStep-1].desc}</p>
+        <div className="mt-8 p-6 bg-slate-50 rounded-2xl border-l-4 border-indigo-500 italic text-sm text-slate-500">
+          💡 Dica importante: Siga exatamente o nome das variáveis para a MIA não se perder.
+        </div>
+      </div>
+      <div className="flex justify-center">
+        <a href="https://vercel.com/new" target="_blank" className="bg-slate-900 text-white px-12 py-5 rounded-[2rem] font-black uppercase text-sm tracking-widest shadow-2xl hover:bg-black transition-all">Ir para a Vercel Agora</a>
+      </div>
+    </div>
+  );
+};
+export default StrategyGuide;
