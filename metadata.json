@@ -1,0 +1,9 @@
+
+{
+  "name": "ImobiFlow AI - Magalhães",
+  "description": "IA de Qualificação e Atendimento para Corretores de Elite.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
