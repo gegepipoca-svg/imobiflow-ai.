@@ -1,8 +1,12 @@
 
 import React, { useState } from 'react';
+import { testAiConnection } from '../services/geminiService';
 
 const StrategyGuide: React.FC = () => {
   const [activeStep, setActiveStep] = useState(1);
+  const [testResult, setTestResult] = useState<{success?: boolean, message?: string} | null>(null);
+  const [testing, setTesting] = useState(false);
+
   const steps = [
     { id: 1, title: "Subir Código", desc: "No GitHub, arraste todos esses arquivos para o repositório.", icon: "📂" },
     { id: 2, title: "Conectar Vercel", desc: "No site vercel.com, importe seu repositório 'imobiflow-ai'.", icon: "☁️" },
@@ -10,12 +14,55 @@ const StrategyGuide: React.FC = () => {
     { id: 4, title: "Decolagem", desc: "Clique em Deploy e pronto! Seu link profissional estará no ar.", icon: "🚀" }
   ];
 
+  const runDiagnostic = async () => {
+    setTesting(true);
+    const result = await testAiConnection();
+    setTestResult(result);
+    setTesting(false);
+  };
+
   return (
     <div className="max-w-4xl mx-auto space-y-12">
       <div className="text-center">
         <h2 className="text-4xl font-black italic tracking-tighter uppercase text-slate-900">Manual de Implantação 🚀</h2>
         <p className="text-slate-500 mt-2 font-medium">Transformando código em ferramenta de vendas.</p>
       </div>
+      
+      {/* Bloco de Teste de Vida */}
+      <div className="bg-slate-900 p-8 rounded-[3rem] shadow-2xl border-b-8 border-indigo-600">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="text-center md:text-left">
+            <h3 className="text-white font-black uppercase text-sm tracking-widest mb-1">Diagnóstico de Sistema</h3>
+            <p className="text-slate-400 text-xs font-bold uppercase italic">Verifique se a MIA está online na Vercel</p>
+          </div>
+          <button 
+            onClick={runDiagnostic}
+            disabled={testing}
+            className={`px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl ${
+              testing ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-500 active:scale-95'
+            }`}
+          >
+            {testing ? 'PROCESSANDO...' : 'EXECUTAR TESTE DE VIDA ✨'}
+          </button>
+        </div>
+
+        {testResult && (
+          <div className={`mt-6 p-6 rounded-2xl animate-in fade-in zoom-in duration-300 border-2 ${
+            testResult.success ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+          }`}>
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">{testResult.success ? '✅' : '❌'}</span>
+              <p className="text-sm font-black uppercase italic tracking-tighter">{testResult.message}</p>
+            </div>
+            {!testResult.success && (
+              <p className="mt-2 text-[10px] text-rose-300 font-bold uppercase leading-relaxed">
+                DICA: Vá em Settings -> Environment Variables na Vercel e verifique se o nome da chave é exatamente API_KEY.
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {steps.map(s => (
           <button key={s.id} onClick={() => setActiveStep(s.id)} className={`p-8 rounded-[2rem] border-2 transition-all text-left ${activeStep === s.id ? 'bg-indigo-600 border-indigo-600 text-white shadow-xl scale-105' : 'bg-white border-slate-100 text-slate-400'}`}>
